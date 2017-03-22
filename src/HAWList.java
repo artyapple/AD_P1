@@ -1,5 +1,5 @@
 
-public interface HAWList<T> {
+public interface HAWList<K,E> {
 
 	/**
 	 * inserts the specified element at the specified position in this list.
@@ -9,7 +9,7 @@ public interface HAWList<T> {
 	 * @throw IndexOutOfBoundsException 
 	 *         if the pos is out of range (index < 0 || index > size())
 	 */
-	public void insert(int pos, T elem);
+	public void insert(int pos, E elem);
 
 	/**
 	 * removes the element at the specified position in this list
@@ -23,8 +23,9 @@ public interface HAWList<T> {
 	/**
 	 * removes the element with the specified key in this list
 	 * @param key
+	 * @ensure find(key)==0
 	 */
-	public void delete(); //TODO param
+	public void delete(K key); //TODO param
 
 	/**
 	 * finds the element with the specified key in this list
@@ -32,7 +33,7 @@ public interface HAWList<T> {
 	 * @return the position of element in this list
 	 * @ensure retrieve(find(elem)).equals(elem)
 	 */
-	public int find(); //TODO param
+	public int find(K key); //TODO param
 
 	/**
 	 * returns the element at the specified position in this list.
@@ -41,7 +42,7 @@ public interface HAWList<T> {
 	 * @require pos >= 0 && pos < length
 	 * @ensure find(retrieve(pos)).equals(pos)
 	 */
-	public T retrieve(int pos);
+	public E retrieve(int pos);
 
 	/**
 	 * joins two lists.
@@ -50,5 +51,5 @@ public interface HAWList<T> {
 	 * @require otherList != null
 	 * @require otherList instance of IList<T>
 	 */
-	public HAWList<T> concat(HAWList<T> otherList);
+	public HAWList<K,E> concat(HAWList<K,E> otherList);
 }
