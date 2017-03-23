@@ -9,7 +9,7 @@ public interface HAWList<K,E> {
 	 * @throw IndexOutOfBoundsException 
 	 *         if the pos is out of range (index < 0 || index > size())
 	 */
-	public void insert(int pos, E elem);
+	public void insert(int pos, E elem, K key);
 
 	/**
 	 * removes the element at the specified position in this list
@@ -52,4 +52,20 @@ public interface HAWList<K,E> {
 	 * @require otherList instance of IList<T>
 	 */
 	public HAWList<K,E> concat(HAWList<K,E> otherList);
+
+	/**
+     * Returns the number of elements in this list.
+     *
+     * @return the number of elements in this list
+     */
+	public int size();
+
+	/**
+	 * returns the key at the specified position in this list.
+	 * @param pos
+	 * @return The key on Position pos
+	 * @require pos >= 0 && pos < length
+	 * @ensure find(retrieve(pos)).equals(pos)
+	 */
+	public K retrieveKey(int pos);
 }
