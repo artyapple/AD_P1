@@ -1,3 +1,5 @@
+package org.AD_P1.HAWLinkedList;
+import org.AD_P1.Interfaces.HAWList;
 
 public class HAWLinkedList<K, E> implements HAWList<K, E>{
 	

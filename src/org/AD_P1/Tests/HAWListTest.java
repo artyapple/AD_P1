@@ -1,7 +1,10 @@
+package org.AD_P1.Tests;
 import static org.junit.Assert.*;
 
 import java.util.UUID;
 
+import org.AD_P1.HAWLinkedList.HAWLinkedList;
+import org.AD_P1.Interfaces.HAWList;
 import org.junit.Before;
 import org.junit.Test;
 
