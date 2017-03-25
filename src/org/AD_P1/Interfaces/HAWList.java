@@ -1,6 +1,8 @@
 package org.AD_P1.Interfaces;
 
-public interface HAWList<K,E> {
+public interface HAWList<K, E> {
+	
+	public static final int INITIAL_ARRAY_LENGTH = 10;
 
 	/**
 	 * inserts the specified element at the specified position in this list.
@@ -10,7 +12,7 @@ public interface HAWList<K,E> {
 	 * @throw IndexOutOfBoundsException 
 	 *         if the pos is out of range (index < 0 || index > size())
 	 */
-	public void insert(int pos, E elem, K key);
+	public void insert(int pos, E elem);
 
 	/**
 	 * removes the element at the specified position in this list
@@ -52,7 +54,7 @@ public interface HAWList<K,E> {
 	 * @require otherList != null
 	 * @require otherList instance of IList<T>
 	 */
-	public HAWList<K,E> concat(HAWList<K,E> otherList);
+	public void concat(HAWList<K,E> otherList);
 
 	/**
      * Returns the number of elements in this list.
@@ -68,5 +70,5 @@ public interface HAWList<K,E> {
 	 * @require pos >= 0 && pos < length
 	 * @ensure find(retrieve(pos)).equals(pos)
 	 */
-	public K retrieveKey(int pos);
+	//public K retrieveKey(int pos);
 }
