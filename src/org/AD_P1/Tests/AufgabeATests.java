@@ -9,7 +9,7 @@ import org.junit.Test;
 public class AufgabeATests {
 
 	@Test
-	public void insertTest() throws Exception {
+	public void tests() throws Exception {
 
 		int keyCounter = 1;
 		ArrayList<Integer, Integer> list = null;
@@ -61,5 +61,17 @@ public class AufgabeATests {
 		assertTrue(list.retrieve(12) == null);
 		assertTrue(list.retrieve(11) == 100);
 
+		// 10 k Tests
+		list = new  ArrayList<>();
+		keyCounter = 0;
+
+		for (int i = 0; i < 10000; i++) {
+			list.insert(0, i);
+			list.setKey(0, keyCounter++);
+			assertTrue(list.retrieve(0) == i);
+		}
+		
+		assertTrue(list.retrieve(0) == 9999);
+		assertTrue(list.retrieve(9999) == 0);
 	}
 }
