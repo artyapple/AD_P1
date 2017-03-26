@@ -1,7 +1,7 @@
 package org.AD_P1.ArrayList;
 
 import java.util.Arrays;
-import org.AD_P1.Interfaces.File;
+
 import org.AD_P1.Interfaces.*;
 
 public class ArrayList<K, E> implements HAWList<K, E> {
@@ -22,7 +22,7 @@ public class ArrayList<K, E> implements HAWList<K, E> {
 	 * @param <E>
 	 *            value
 	 */
-	public class FileA<T, G> implements File<T, G> {
+	public static class FileA<T, G> implements File<T, G> {
 
 		private T key = null;
 		private G element = null;
@@ -42,7 +42,7 @@ public class ArrayList<K, E> implements HAWList<K, E> {
 		}
 
 		protected FileA(T key, G element) {
-			this.key = key;
+			this.key = null;
 			this.element = element;
 		}
 
@@ -65,10 +65,10 @@ public class ArrayList<K, E> implements HAWList<K, E> {
 	 *            to be added
 	 */
 	@Override
-	public void insert(int pos, E elem, K key) throws IllegalArgumentException {
+	public void insert(int pos, E elem) throws IllegalArgumentException {
 
 		elementCheck(elem);
-		
+
 		// // pos check
 		// if (pos >= 10 || pos < 0) {
 		// throw new IndexOutOfBoundsException("");
@@ -85,7 +85,6 @@ public class ArrayList<K, E> implements HAWList<K, E> {
 		}
 
 		arrayList[pos] = new FileA<K, E>(null, elem);
-		setKey(pos, key);
 		currentAmount++;
 
 	}
@@ -118,8 +117,10 @@ public class ArrayList<K, E> implements HAWList<K, E> {
 	@Override
 	public void delete(K key) {
 		for (int i = 0; i < size; i++) {
-			if (arrayList[i].getKey() == key) {
-				arrayList[i] = null;
+			if (arrayList[i] != null) {
+				if (arrayList[i].getKey() == key) {
+					arrayList[i] = null;
+				}
 			}
 		}
 
@@ -139,12 +140,14 @@ public class ArrayList<K, E> implements HAWList<K, E> {
 	public int find(K key) throws IllegalArgumentException {
 
 		for (int i = 0; i < size; i++) {
-			if (arrayList[i].getKey() == key) {
-				return i;
+			if (arrayList[i] != null) {
+				if (arrayList[i].getKey() == key) {
+					return i;
+				}
 			}
 		}
+		throw new IllegalArgumentException("Key not found");
 
-		return (Integer) null;
 	}
 
 	/**
@@ -169,12 +172,6 @@ public class ArrayList<K, E> implements HAWList<K, E> {
 			retrieve = arrayList[pos].getElement();
 		}
 		return retrieve;
-	}
-
-	@Override
-	public HAWList<K, E> concat(HAWList<K, E> otherList) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	/**
@@ -268,7 +265,7 @@ public class ArrayList<K, E> implements HAWList<K, E> {
 	 *            key from element
 	 */
 	public void setKey(int pos, K key) {
-		if (!posCheck(pos)) {
+		if (posCheck(pos)) {
 			arrayList[pos].setKey(key);
 		}
 	}
@@ -276,12 +273,56 @@ public class ArrayList<K, E> implements HAWList<K, E> {
 	@Override
 	public int size() {
 		// TODO Auto-generated method stub
-		return 0;
+		return size;
+	}
+
+	public K retrieveKey(int pos) {
+		if (arrayList[pos] != null) {
+			return arrayList[pos].getKey();
+		}
+		return null;
+	}
+
+	/**
+	 * concat
+	 * 
+	 * concats 2 arraylists
+	 * 
+	 * @param otherList
+	 *            other arraylist to concat
+	 * @throws IllegalArgumentException
+	 *             wrong type of list
+	 */
+	@Override
+	public void concat(HAWList<K, E> otherList) throws IllegalArgumentException {
+		// classcheck
+		if (!(arrayList.getClass().isInstance(otherList.getContainer()))) {
+			throw new IllegalArgumentException("wrong type of list");
+		}
+		// save old container length and copy old list
+		int arrayListLength = arrayList.length;
+		arrayList = Arrays.copyOf(arrayList, arrayList.length + otherList.getContainer().length);
+
+		// adjust new size
+		size = arrayList.length;
+
+		FileA<K, E>[] otherArray = (FileA<K, E>[]) otherList.getContainer();
+
+		for (int i = arrayList.length - otherArray.length; i < arrayList.length; i++) {
+			arrayList[i] = otherArray[i - arrayListLength];
+		}
+		// adjusting amount of elements captured
+		for (int i = 0; i < otherArray.length; i++) {
+			if (otherArray[i] != null) {
+				currentAmount++;
+			}
+		}
+
 	}
 
 	@Override
-	public K retrieveKey(int pos) {
-		// TODO Auto-generated method stub
-		return null;
+	public File<K, E>[] getContainer() {
+		return arrayList;
 	}
+
 }

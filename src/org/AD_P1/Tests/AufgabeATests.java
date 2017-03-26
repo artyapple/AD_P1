@@ -11,23 +11,55 @@ public class AufgabeATests {
 	@Test
 	public void insertTest() throws Exception {
 
-		ArrayList<Integer, Integer> liste = null;
-		liste = new ArrayList();
+		int keyCounter = 1;
+		ArrayList<Integer, Integer> list = null;
+		list = new ArrayList();
 
-		liste.insert(0, 1,0);
-		assertTrue(liste.retrieve(0) == 1);
-		
-		for(int i=0;i<20000;i++){
-			liste.insert(0,2,1);
-		}
-		assertTrue(liste.retrieve(20000) == 1);
-		
-		liste.delete(0);
-		assertTrue(liste.retrieve(0) == null);
-		
-		liste.setKey(0, 4);
-	
-		
-		
+		// insert test
+		list.insert(0, 1);
+		list.setKey(0, keyCounter++);
+
+		assertTrue(list.retrieve(0) == 1);
+
+		// push check
+		list.insert(0, 2);
+		list.setKey(0, keyCounter++);
+
+		assertTrue(list.retrieve(1) == 1);
+		assertTrue(list.retrieve(0) == 2);
+
+		// keyfind check
+		assertTrue(list.retrieve(list.find(1)) == 1);
+		assertTrue(list.retrieve(list.find(2)) == 2);
+
+		// delcheck
+		list.delete(0); // posKill
+		assertTrue(list.retrieve(0) == null);
+
+		list.delete((Integer) 1);
+		assertTrue(list.retrieve(1) == null);
+
+		// concat check
+		list.insert(0, 1);
+		list.setKey(0, keyCounter++);
+		list.insert(1, 2);
+		list.setKey(1, keyCounter++);
+
+		ArrayList<Integer, Integer> listToConcat = null;
+		listToConcat = new ArrayList();
+
+		listToConcat.insert(0, 99);
+		listToConcat.setKey(0, keyCounter++);
+
+		listToConcat.insert(1, 100);
+		listToConcat.setKey(1, keyCounter++);
+
+		list.concat(listToConcat);
+
+		assertTrue(list.retrieve(1) == 2);
+		assertTrue(list.retrieve(0) == 1);
+		assertTrue(list.retrieve(12) == null);
+		assertTrue(list.retrieve(11) == 100);
+
 	}
 }
