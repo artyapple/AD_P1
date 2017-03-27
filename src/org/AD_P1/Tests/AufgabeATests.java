@@ -62,16 +62,18 @@ public class AufgabeATests {
 		assertTrue(list.retrieve(11) == 100);
 
 		// 10 k Tests
-		list = new  ArrayList<>();
-		keyCounter = 0;
+		for (int j = 0; j <= 5; j++) {
 
-		for (int i = 0; i < 10000; i++) {
-			list.insert(0, i);
-			list.setKey(0, keyCounter++);
-			assertTrue(list.retrieve(0) == i);
+			list = new ArrayList<>();
+			keyCounter = 0;
+
+			for (int i = 0; i < Math.pow(10, j); i++) {
+				list.insert(i, i);
+				list.setKey(i, keyCounter++);
+
+			}
+			System.out.println("ProcessCounter @: " + Math.pow(10,j) + " " + list.getProcessCounter());
 		}
-		
-		assertTrue(list.retrieve(0) == 9999);
-		assertTrue(list.retrieve(9999) == 0);
+
 	}
 }
