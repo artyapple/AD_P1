@@ -1,6 +1,8 @@
 package org.AD_P1.Interfaces;
 
-public interface HAWList<K, E> {
+import java.util.UUID;
+
+public interface HAWList<E> {
 	
 	public static final int INITIAL_ARRAY_LENGTH = 10;
 
@@ -12,7 +14,7 @@ public interface HAWList<K, E> {
 	 * @throw IndexOutOfBoundsException 
 	 *         if the pos is out of range (index < 0 || index > size())
 	 */
-	public void insert(int pos, E elem);
+	public void insert(HAWListElement<E> pos, E elem);
 
 	/**
 	 * removes the element at the specified position in this list
@@ -21,14 +23,14 @@ public interface HAWList<K, E> {
      * @throw IndexOutOfBoundsException 
      *         if the pos is out of range (index < 0 || index > size())
 	 */
-	public void delete(int pos);
+	public void delete(HAWListElement<E> pos);
 
 	/**
 	 * removes the element with the specified key in this list
 	 * @param key
 	 * @ensure find(key)==0
 	 */
-	public void delete(K key); //TODO param
+	public void delete(int key); //TODO param
 
 	/**
 	 * finds the element with the specified key in this list
@@ -36,7 +38,7 @@ public interface HAWList<K, E> {
 	 * @return the position of element in this list
 	 * @ensure retrieve(find(elem)).equals(elem)
 	 */
-	public int find(K key); //TODO param
+	public HAWListElement<E> find(int key); //TODO param
 
 	/**
 	 * returns the element at the specified position in this list.
@@ -45,7 +47,7 @@ public interface HAWList<K, E> {
 	 * @require pos >= 0 && pos < length
 	 * @ensure find(retrieve(pos)).equals(pos)
 	 */
-	public E retrieve(int pos);
+	public E retrieve(HAWListElement<E> pos);
 
 	/**
 	 * joins two lists.
@@ -54,7 +56,7 @@ public interface HAWList<K, E> {
 	 * @require otherList != null
 	 * @require otherList instance of IList<T>
 	 */
-	public void concat(HAWList<K,E> otherList);
+	public void concat(HAWList<E> otherList);
 
 	/**
      * Returns the number of elements in this list.
@@ -63,12 +65,12 @@ public interface HAWList<K, E> {
      */
 	public int size();
 
-	/**
-	 * returns the key at the specified position in this list.
-	 * @param pos
-	 * @return The key on Position pos
-	 * @require pos >= 0 && pos < length
-	 * @ensure find(retrieve(pos)).equals(pos)
-	 */
+//	/**
+//	 * returns the key at the specified position in this list.
+//	 * @param pos
+//	 * @return The key on Position pos
+//	 * @require pos >= 0 && pos < length
+//	 * @ensure find(retrieve(pos)).equals(pos)
+//	 */
 	//public K retrieveKey(int pos);
 }

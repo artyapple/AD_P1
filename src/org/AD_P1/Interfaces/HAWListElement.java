@@ -1,8 +1,8 @@
 package org.AD_P1.Interfaces;
 
-public interface HAWListElement<K, E> {
-	
-	 public K getKey();
+import java.util.UUID;
+
+public interface HAWListElement<E> {
 	 
 	 public E getElement();
 	 
