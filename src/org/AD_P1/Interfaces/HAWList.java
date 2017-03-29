@@ -50,7 +50,7 @@ public interface HAWList<E> {
 	 * @require pos >= 0 && pos < length
 	 * @ensure find(retrieve(pos)).equals(pos)
 	 */
-	public E retrieve(Object pos);
+	public HAWListElement<E> retrieve(Object pos);
 
 	/**
 	 * joins two lists.
