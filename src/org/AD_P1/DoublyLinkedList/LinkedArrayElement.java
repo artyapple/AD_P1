@@ -2,7 +2,7 @@ package org.AD_P1.DoublyLinkedList;
 
 import org.AD_P1.Interfaces.HAWListElement;
 
-public class LinkedArrayElement<K,E> implements HAWListElement<K, E> {
+public class LinkedArrayElement<E> implements HAWListElement< E> {
    
     /**
      * Position in array

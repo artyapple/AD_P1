@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public interface HAWListElement<E> {
 	 
-	 public E getElement();
+	 public E getValue();
 	 public int getKey();
 	 
 }

@@ -2,7 +2,7 @@ package org.AD_P1.DoublyLinkedList;
 
 import org.AD_P1.Interfaces.HAWList;
 
-public class HAWLinkedArrayList<K, E> implements HAWList<K, E> {
+public class HAWLinkedArrayList<E> implements HAWList<K, E> {
 	/**
 	 * size of list
 	 */

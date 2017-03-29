@@ -1,7 +1,7 @@
 package org.AD_P1.HAWLinkedList;
 import org.AD_P1.Interfaces.HAWList;
 
-public class HAWLinkedList<K, E> implements HAWList<K, E>{
+public class HAWLinkedList< E> implements HAWList< E>{
 	
 	private Node head;
 	private Node tail;
