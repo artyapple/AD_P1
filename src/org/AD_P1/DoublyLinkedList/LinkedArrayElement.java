@@ -3,7 +3,7 @@ package org.AD_P1.DoublyLinkedList;
 import org.AD_P1.Element.Element;
 import org.AD_P1.Interfaces.HAWListElement;
 
-public class LinkedArrayElement<E> implements HAWListElement< E> {
+public class LinkedArrayElement<E> {
 
    
     /**
@@ -37,7 +37,7 @@ public class LinkedArrayElement<E> implements HAWListElement< E> {
     }
 
     public String toString() {
-        return element + " " + index + " " + next + " " + prev;
+        return "Key: "+ element.getKey() + " Index: " + index + " next: " + next + " prev: " + prev;
     }
     
     public int getIndex() {
@@ -57,7 +57,7 @@ public class LinkedArrayElement<E> implements HAWListElement< E> {
     }
     
     public E getElementData(){
-    	return getElementWrapper().getElement();
+    	return getElementWrapper().getValue();
     }
     
     public int getElementKey(){
