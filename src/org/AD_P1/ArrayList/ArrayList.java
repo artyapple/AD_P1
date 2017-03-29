@@ -43,7 +43,7 @@ public class ArrayList<E> extends Counter implements HAWList<E> {
 		if (arrayList[position] != null) {
 			pushFiles(position);
 		}
-
+		count();
 		arrayList[position] = (Element<E>) elem;
 		currentAmount++;
 
@@ -60,6 +60,7 @@ public class ArrayList<E> extends Counter implements HAWList<E> {
 	 **/
 	@Override
 	public void delete(Object pos) {
+		count();
 		Integer position = (Integer) pos;
 		if (!(sizeCheck()) || !(posCheck(position))) {
 			return;
@@ -76,14 +77,17 @@ public class ArrayList<E> extends Counter implements HAWList<E> {
 	 *            key from elements which should get deleted
 	 */
 	@Override
-	public void delete(int key) {
+	public void delete(int key) throws IllegalArgumentException {
 		for (int i = 0; i < size; i++) {
+			count();
 			if (arrayList[i] != null) {
 				if (arrayList[i].getKey() == key) {
 					arrayList[i] = null;
+					return;
 				}
 			}
 		}
+		throw new IllegalArgumentException("key not found");
 
 	}
 
@@ -101,6 +105,7 @@ public class ArrayList<E> extends Counter implements HAWList<E> {
 	public Object find(int key) throws IllegalArgumentException {
 
 		for (int i = 0; i < size; i++) {
+			count();
 			if (arrayList[i] != null) {
 				if (arrayList[i].getKey() == key) {
 					return i;
@@ -122,18 +127,19 @@ public class ArrayList<E> extends Counter implements HAWList<E> {
 	 * @return retrieve requested element
 	 */
 	@Override
-	public E retrieve(Object pos) throws IndexOutOfBoundsException {
+	public HAWListElement<E> retrieve(Object pos) throws IndexOutOfBoundsException {
 		Integer position = (Integer) pos;
 
 		if (position < 0 || position >= size) {
 			throw new IndexOutOfBoundsException();
 		}
 
-		E retrieve = null;
+		Element<E> retrieve = null;
+		count();
 		if (arrayList[position] != null) {
-			retrieve = arrayList[position].getElement();
+			retrieve = arrayList[position];
 		}
-		return retrieve;
+		return (Element<E>) retrieve;
 	}
 
 	/**
@@ -179,6 +185,7 @@ public class ArrayList<E> extends Counter implements HAWList<E> {
 		Element<E> newListArray[] = Arrays.copyOf(arrayList, arrayList.length + 10);
 		arrayList = newListArray;
 		size = arrayList.length;
+		count();
 	}
 
 	/**
@@ -213,9 +220,11 @@ public class ArrayList<E> extends Counter implements HAWList<E> {
 			increaseSize();
 		}
 		if (arrayList[pos + 1] != null) {
+			count();
 			pushFiles(pos + 1);
 		}
 		arrayList[pos + 1] = arrayList[pos];
+		count();
 	}
 
 	@Override
