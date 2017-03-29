@@ -2,55 +2,21 @@ package org.AD_P1.ArrayList;
 
 import java.util.Arrays;
 
+import org.AD_P1.Counter.Counter;
+import org.AD_P1.Element.Element;
 import org.AD_P1.Interfaces.*;
 
-public class ArrayList<K, E> implements HAWList<K, E> {
+public class ArrayList<E> extends Counter implements HAWList<E> {
 
 	private static final int INITIAL_ARRAY_LENGTH = 10;
 
-	private FileA<K, E> arrayList[]; // list representaiting array
+	private Element<E> arrayList[]; // list representaiting array
 	private int currentAmount = 0;
 	private int size;
 
-	/**
-	 * FileA represents key and value which have to be safed.
-	 * 
-	 * @author me
-	 *
-	 * @param <K>
-	 *            key
-	 * @param <E>
-	 *            value
-	 */
-	public static class FileA<T, G> implements File<T, G> {
-
-		private T key = null;
-		private G element = null;
-
-		@Override
-		public T getKey() {
-			return key;
-		}
-
-		@Override
-		public G getElement() {
-			return element;
-		}
-
-		public void setKey(T key) {
-			this.key = key;
-		}
-
-		protected FileA(T key, G element) {
-			this.key = null;
-			this.element = element;
-		}
-
-	}
-
 	@SuppressWarnings("unchecked")
 	public ArrayList() {
-		arrayList = new FileA[INITIAL_ARRAY_LENGTH];
+		arrayList = new Element[INITIAL_ARRAY_LENGTH];
 		size = INITIAL_ARRAY_LENGTH;
 	}
 
@@ -65,26 +31,20 @@ public class ArrayList<K, E> implements HAWList<K, E> {
 	 *            to be added
 	 */
 	@Override
-	public void insert(int pos, E elem) throws IllegalArgumentException {
-
+	public void insert(Object pos, HAWListElement<E> elem) throws IllegalArgumentException {
 		elementCheck(elem);
 
-		// // pos check
-		// if (pos >= 10 || pos < 0) {
-		// throw new IndexOutOfBoundsException("");
-		// }
-
-		// arraysize check
+		Integer position = (Integer) pos;
 		while (!(sizeCheck()) || !(posCheck(pos))) {
 			increaseSize();
 		}
 
 		// position test
-		if (arrayList[pos] != null) {
-			pushFiles(pos);
+		if (arrayList[position] != null) {
+			pushFiles(position);
 		}
 
-		arrayList[pos] = new FileA<K, E>(null, elem);
+		arrayList[position] = (Element<E>) elem;
 		currentAmount++;
 
 	}
@@ -99,11 +59,12 @@ public class ArrayList<K, E> implements HAWList<K, E> {
 	 *            position of file element which should be deleted
 	 **/
 	@Override
-	public void delete(int pos) {
-		if (!(sizeCheck()) || !(posCheck(pos))) {
+	public void delete(Object pos) {
+		Integer position = (Integer) pos;
+		if (!(sizeCheck()) || !(posCheck(position))) {
 			return;
 		}
-		arrayList[pos] = null;
+		arrayList[position] = null;
 	}
 
 	/**
@@ -115,7 +76,7 @@ public class ArrayList<K, E> implements HAWList<K, E> {
 	 *            key from elements which should get deleted
 	 */
 	@Override
-	public void delete(K key) {
+	public void delete(int key) {
 		for (int i = 0; i < size; i++) {
 			if (arrayList[i] != null) {
 				if (arrayList[i].getKey() == key) {
@@ -137,7 +98,7 @@ public class ArrayList<K, E> implements HAWList<K, E> {
 	 * @return pos position of element
 	 */
 	@Override
-	public int find(K key) throws IllegalArgumentException {
+	public Object find(int key) throws IllegalArgumentException {
 
 		for (int i = 0; i < size; i++) {
 			if (arrayList[i] != null) {
@@ -161,15 +122,16 @@ public class ArrayList<K, E> implements HAWList<K, E> {
 	 * @return retrieve requested element
 	 */
 	@Override
-	public E retrieve(int pos) throws IndexOutOfBoundsException {
+	public E retrieve(Object pos) throws IndexOutOfBoundsException {
+		Integer position = (Integer) pos;
 
-		if (pos < 0 || pos >= size) {
+		if (position < 0 || position >= size) {
 			throw new IndexOutOfBoundsException();
 		}
 
 		E retrieve = null;
-		if (arrayList[pos] != null) {
-			retrieve = arrayList[pos].getElement();
+		if (arrayList[position] != null) {
+			retrieve = arrayList[position].getElement();
 		}
 		return retrieve;
 	}
@@ -200,8 +162,9 @@ public class ArrayList<K, E> implements HAWList<K, E> {
 	 * @return true if pos is in range
 	 * @return false if pos is out of range
 	 */
-	private boolean posCheck(int pos) {
-		if (pos >= size || pos < 0) {
+	private boolean posCheck(Object pos) {
+		Integer position = (Integer) pos;
+		if (position >= size || position < 0) {
 			return false;
 		}
 		return true;
@@ -213,7 +176,7 @@ public class ArrayList<K, E> implements HAWList<K, E> {
 	 * increase Arrayssize size += 10
 	 */
 	private void increaseSize() {
-		FileA<K, E> newListArray[] = Arrays.copyOf(arrayList, arrayList.length + 10);
+		Element<E> newListArray[] = Arrays.copyOf(arrayList, arrayList.length + 10);
 		arrayList = newListArray;
 		size = arrayList.length;
 	}
@@ -223,15 +186,16 @@ public class ArrayList<K, E> implements HAWList<K, E> {
 	 * 
 	 * checks element
 	 * 
-	 * @param element
+	 * @param elem
 	 * @throws IllegalArgumentException
 	 *             element null
 	 */
-	private void elementCheck(E element) throws IllegalArgumentException {
+	private void elementCheck(HAWListElement<E> elem) throws IllegalArgumentException {
 		// element type and null check
-		if (element == null) {
+		if (elem == null) {
 			throw new IllegalArgumentException("element is null ");
 		}
+
 	}
 
 	/**
@@ -254,33 +218,10 @@ public class ArrayList<K, E> implements HAWList<K, E> {
 		arrayList[pos + 1] = arrayList[pos];
 	}
 
-	/**
-	 * setKey
-	 * 
-	 * sets key because we dont know how to set keys
-	 * 
-	 * @param pos
-	 *            position of file that will receive a key
-	 * @param key
-	 *            key from element
-	 */
-	public void setKey(int pos, K key) {
-		if (posCheck(pos)) {
-			arrayList[pos].setKey(key);
-		}
-	}
-
 	@Override
 	public int size() {
 		// TODO Auto-generated method stub
 		return size;
-	}
-
-	public K retrieveKey(int pos) {
-		if (arrayList[pos] != null) {
-			return arrayList[pos].getKey();
-		}
-		return null;
 	}
 
 	/**
@@ -294,19 +235,21 @@ public class ArrayList<K, E> implements HAWList<K, E> {
 	 *             wrong type of list
 	 */
 	@Override
-	public void concat(HAWList<K, E> otherList) throws IllegalArgumentException {
+	public void concat(HAWList<E> otherList) throws IllegalArgumentException {
+		ArrayList<E> castedList = (ArrayList<E>) otherList;
+
 		// classcheck
-		if (!(arrayList.getClass().isInstance(otherList.getContainer()))) {
-			throw new IllegalArgumentException("wrong type of list");
-		}
+		// if (otherList.retrieve(0) instanceof HAWListElement<E>) {
+		// throw new IllegalArgumentException("wrong type of list");
+		// }
 		// save old container length and copy old list
 		int arrayListLength = arrayList.length;
-		arrayList = Arrays.copyOf(arrayList, arrayList.length + otherList.getContainer().length);
+		arrayList = Arrays.copyOf(arrayList, arrayList.length + castedList.size());
 
 		// adjust new size
 		size = arrayList.length;
 
-		FileA<K, E>[] otherArray = (FileA<K, E>[]) otherList.getContainer();
+		Element<E>[] otherArray = (Element<E>[]) castedList.getContainer();
 
 		for (int i = arrayList.length - otherArray.length; i < arrayList.length; i++) {
 			arrayList[i] = otherArray[i - arrayListLength];
@@ -320,8 +263,7 @@ public class ArrayList<K, E> implements HAWList<K, E> {
 
 	}
 
-	@Override
-	public File<K, E>[] getContainer() {
+	public Element<E>[] getContainer() {
 		return arrayList;
 	}
 
