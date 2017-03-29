@@ -89,23 +89,24 @@ public class HAWLinkedArrayList<E> implements HAWList<E> {
 
 		LinkedArrayElement<E> elem = (LinkedArrayElement<E>) find(key);
 
-		int last = -1;
-
-		if (elem != null) {
-
-			if (elem.getNext() != -1) {
-				LinkedArrayElement<E> prevElem = array[elem.getPrev()];
-				LinkedArrayElement<E> nextElem = array[elem.getNext()];
-
-				prevElem.setNext(nextElem.getIndex());
-				nextElem.setPrev(prevElem.getIndex());
-			} else {
-				LinkedArrayElement<E> prevElem = array[elem.getPrev()];
-				prevElem.setNext(last);
-			}
-			array[elem.getIndex()] = null;
-			size--;
-		}
+		delete(elem);
+//		int last = -1;
+//
+//		if (elem != null) {
+//
+//			if (elem.getNext() != -1) {
+//				LinkedArrayElement<E> prevElem = array[elem.getPrev()];
+//				LinkedArrayElement<E> nextElem = array[elem.getNext()];
+//
+//				prevElem.setNext(nextElem.getIndex());
+//				nextElem.setPrev(prevElem.getIndex());
+//			} else {
+//				LinkedArrayElement<E> prevElem = array[elem.getPrev()];
+//				prevElem.setNext(last);
+//			}
+//			array[elem.getIndex()] = null;
+//			size--;
+//		}
 	}
 
 	@Override
@@ -177,6 +178,19 @@ public class HAWLinkedArrayList<E> implements HAWList<E> {
 	public void delete(Object pos) {
 		if (pos != null) {
 			LinkedArrayElement<E> elem = (LinkedArrayElement<E>) pos;
+			
+			int last = -1;
+			if (elem.getNext() != -1) {
+				LinkedArrayElement<E> prevElem = array[elem.getPrev()];
+				LinkedArrayElement<E> nextElem = array[elem.getNext()];
+
+				prevElem.setNext(nextElem.getIndex());
+				nextElem.setPrev(prevElem.getIndex());
+			} else {
+				LinkedArrayElement<E> prevElem = array[elem.getPrev()];
+				prevElem.setNext(last);
+			}
+			
 			array[elem.getIndex()] = null;
 			size--;
 		}
@@ -216,6 +230,10 @@ public class HAWLinkedArrayList<E> implements HAWList<E> {
 		list.insert(list.find(000), new Element<String>("c", 333));
 		list.delete(111);
 		list.insert(list.find(222), new Element<String>("f", 444));
+		list.delete(list.find(222));
+		
+		String str = list.retrieve(list.find(333)).getValue();
+		
 		// c, a, b
 
 		// list.delete(1);
@@ -225,5 +243,6 @@ public class HAWLinkedArrayList<E> implements HAWList<E> {
 		for (int i = 1; i < list.array.length; i++) {
 			System.out.println((LinkedArrayElement<String>) (list.array[i]) + ", ");
 		}
+		System.out.println("retrieve elem 333: "+str);
 	}
 }

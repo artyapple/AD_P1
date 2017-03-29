@@ -8,7 +8,7 @@ public class Element<E> implements HAWListElement<E> {
 	private int key;
 
 	@Override
-	public E getElement() {
+	public E getValue() {
 		// TODO Auto-generated method stub
 		return element;
 	}
