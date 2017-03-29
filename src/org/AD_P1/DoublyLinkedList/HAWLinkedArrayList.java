@@ -33,7 +33,6 @@ public class HAWLinkedArrayList<E> implements HAWList<E> {
 	@Override
 	public void insert(Object pos, HAWListElement<E> elem) {
 
-
 		int arrayIndexToSave = getFreeArrayIndex();
 		int prevIndex = 0;
 		int nextIndex = -1;
@@ -43,43 +42,41 @@ public class HAWLinkedArrayList<E> implements HAWList<E> {
 			// LinkedArrayElement<E> posElement = (LinkedArrayElement<E>)pos;
 			LinkedArrayElement<E> stopper = array[0];
 			if (size != 0) {
-				
+
 				LinkedArrayElement<E> firstElem = array[stopper.getNext()];
 				stopper.setNext(arrayIndexToSave);
 				firstElem.setPrev(arrayIndexToSave);
 
-				//prevIndex = 0;
+				// prevIndex = 0;
 				nextIndex = firstElem.getIndex();
 
-			} else{
+			} else {
 				stopper.setNext(arrayIndexToSave);
 				lastElementIndex = arrayIndexToSave;
-				//prevIndex = 0;
-				//nextIndex = -1;
-				
+				// prevIndex = 0;
+				// nextIndex = -1;
+
 			}
 			indexFirstElement = arrayIndexToSave;
-			
+
 		} else {
 			LinkedArrayElement<E> posElement = (LinkedArrayElement<E>) pos;
-			
-			if(posElement.getNext()!=-1){
-				LinkedArrayElement<E> nextElement = (LinkedArrayElement<E>) array[posElement
-				                                              					.getNext()];
+
+			if (posElement.getNext() != -1) {
+				LinkedArrayElement<E> nextElement = (LinkedArrayElement<E>) array[posElement.getNext()];
 				posElement.setNext(arrayIndexToSave);
 				nextElement.setPrev(arrayIndexToSave);
 				prevIndex = posElement.getIndex();
-				nextIndex = nextElement.getIndex();				
+				nextIndex = nextElement.getIndex();
 			} else {
 				posElement.setNext(arrayIndexToSave);
 				prevIndex = posElement.getIndex();
 				lastElementIndex = arrayIndexToSave;
-				//nextIndex = -1;
+				// nextIndex = -1;
 			}
 		}
 
-		array[arrayIndexToSave] = new LinkedArrayElement<E>(arrayIndexToSave,
-				nextIndex, prevIndex, elem);
+		array[arrayIndexToSave] = new LinkedArrayElement<E>(arrayIndexToSave, nextIndex, prevIndex, elem);
 		size++;
 	}
 
@@ -89,71 +86,35 @@ public class HAWLinkedArrayList<E> implements HAWList<E> {
 		if (key < 0) {
 			throw new IndexOutOfBoundsException();
 		}
-		
+
 		LinkedArrayElement<E> elem = (LinkedArrayElement<E>) find(key);
-		
+
 		int last = -1;
-		
-		if(elem!=null){
-			
-			if(elem.getNext()!=-1){
+
+		if (elem != null) {
+
+			if (elem.getNext() != -1) {
 				LinkedArrayElement<E> prevElem = array[elem.getPrev()];
 				LinkedArrayElement<E> nextElem = array[elem.getNext()];
-				
+
 				prevElem.setNext(nextElem.getIndex());
 				nextElem.setPrev(prevElem.getIndex());
 			} else {
 				LinkedArrayElement<E> prevElem = array[elem.getPrev()];
 				prevElem.setNext(last);
 			}
-			
 			array[elem.getIndex()] = null;
 			size--;
-			
 		}
-		
-		
-		
-		
-		
-//		
-//		
-//
-//		LinkedArrayElement<E> arrEl = getElementOfPosition(pos);
-//
-//		if (size == 1) {
-//			//
-//			indexFirstElement = -1;
-//		} else if (pos == 0) {
-//			// wenn das Element ganz vorne steht
-//			LinkedArrayElement<K, E> next = (LinkedArrayElement<K, E>) array[arrEl
-//					.getNext()];
-//			next.setPrev(-1);
-//			indexFirstElement = next.getIndex();
-//		} else if (pos == size - 1) {
-//			// wenn das Element ganz am Ende steht
-//			LinkedArrayElement<K, E> prev = (LinkedArrayElement<K, E>) array[arrEl
-//					.getPrev()];
-//			prev.setNext(-1);
-//		} else {
-//			// wenn das Element in der Mitte der Liste steht
-//			LinkedArrayElement<K, E> next = (LinkedArrayElement<K, E>) array[arrEl
-//					.getNext()];
-//			LinkedArrayElement<K, E> prev = (LinkedArrayElement<K, E>) array[arrEl
-//					.getPrev()];
-//			prev.setNext(next.getIndex());
-//			next.setPrev(prev.getIndex());
-//		}
-//		array[arrEl.getIndex()] = null;
-//		size--;
 	}
 
 	@Override
 	public HAWListElement<E> retrieve(Object pos) {
-		if (pos < 0 || pos >= size) {
+		if (pos == null) {
 			throw new IndexOutOfBoundsException();
 		}
-		return getElementOfPosition(pos).getElement();
+		LinkedArrayElement<E> arrayElement = (LinkedArrayElement<E>) pos;
+		return arrayElement.getElementWrapper();
 	}
 
 	@Override
@@ -213,8 +174,12 @@ public class HAWLinkedArrayList<E> implements HAWList<E> {
 	}
 
 	@Override
-	public void delete(Object key) {
-
+	public void delete(Object pos) {
+		if (pos != null) {
+			LinkedArrayElement<E> elem = (LinkedArrayElement<E>) pos;
+			array[elem.getIndex()] = null;
+			size--;
+		}
 	}
 
 	@Override
@@ -231,14 +196,12 @@ public class HAWLinkedArrayList<E> implements HAWList<E> {
 
 		while (true) {
 			if (elem.getElementKey() == key) {
-
 				if (elem.getIndex() == 0) {
 					stopper.setElement(new Element(null, -1));
 					return null;
 				} else {
 					return elem;
 				}
-
 			}
 			elem = array[elem.getPrev()];
 		}
@@ -252,6 +215,7 @@ public class HAWLinkedArrayList<E> implements HAWList<E> {
 		list.insert(list.find(111), new Element<String>("b", 222));
 		list.insert(list.find(000), new Element<String>("c", 333));
 		list.delete(111);
+		list.insert(list.find(222), new Element<String>("f", 444));
 		// c, a, b
 
 		// list.delete(1);
@@ -259,10 +223,7 @@ public class HAWLinkedArrayList<E> implements HAWList<E> {
 
 		System.out.println(list.size);
 		for (int i = 1; i < list.array.length; i++) {
-			System.out.println((LinkedArrayElement<String>) (list.array[i])
-					+ ", ");
+			System.out.println((LinkedArrayElement<String>) (list.array[i]) + ", ");
 		}
-
 	}
-
 }
