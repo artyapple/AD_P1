@@ -1,8 +1,10 @@
 package org.AD_P1.DoublyLinkedList;
 
+import org.AD_P1.Element.Element;
 import org.AD_P1.Interfaces.HAWListElement;
 
 public class LinkedArrayElement<E> implements HAWListElement< E> {
+
    
     /**
      * Position in array
@@ -24,12 +26,10 @@ public class LinkedArrayElement<E> implements HAWListElement< E> {
     /**
      * content (element)
      */
-    private E element;
+    private HAWListElement<E> element;
     
     
-    //TODO Key
-    
-    public LinkedArrayElement(int index, int next, int prev, E element) {
+    public LinkedArrayElement(int index, int next, int prev, HAWListElement<E> element) {
         this.index = index;
         this.next = next;
         this.prev = prev;
@@ -52,9 +52,16 @@ public class LinkedArrayElement<E> implements HAWListElement< E> {
         return prev;
     }
 
-    @Override
-    public E getElement() {
+    public HAWListElement<E> getElementWrapper() {
         return element;
+    }
+    
+    public E getElementData(){
+    	return getElementWrapper().getElement();
+    }
+    
+    public int getElementKey(){
+    	return getElementWrapper().getKey();
     }
 
     public void setIndex(int index) {
@@ -69,15 +76,9 @@ public class LinkedArrayElement<E> implements HAWListElement< E> {
         this.prev = prevIndex;
     }
 
-    public void setElement(E content) {
-        this.element = content;
+    public void setElement(Element<E> elem) {
+        this.element = elem;
     }
-
-	@Override
-	public K getKey() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
     
     

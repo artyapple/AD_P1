@@ -1,8 +1,13 @@
 package org.AD_P1.DoublyLinkedList;
 
+import org.AD_P1.Element.Element;
 import org.AD_P1.Interfaces.HAWList;
+import org.AD_P1.Interfaces.HAWListElement;
 
-public class HAWLinkedArrayList<E> implements HAWList<K, E> {
+public class HAWLinkedArrayList<E> implements HAWList<E> {
+	
+
+
 	/**
 	 * size of list
 	 */
@@ -15,53 +20,54 @@ public class HAWLinkedArrayList<E> implements HAWList<K, E> {
 	 * index of first element in array
 	 */
 	private int indexFirstElement;
+	
+	private int lastElementIndex;
 
 	public HAWLinkedArrayList() {
 		size = 0;
 		array = new LinkedArrayElement[INITIAL_ARRAY_LENGTH];
+		array[0] = new LinkedArrayElement<>(0, -1, -1, new Element<E>(null, -1));
 		indexFirstElement = -1;
+		lastElementIndex = -1;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void insert(int pos, E content) {
-		if (pos < 0 || pos > size) {
-			throw new IndexOutOfBoundsException();
-		}
+	public void insert(Object pos, HAWListElement<E> elem) {
+		
+		LinkedArrayElement<E> container = (LinkedArrayElement<E>) pos;
+		
+//		if (pos < 0 || pos > size) {
+//			throw new IndexOutOfBoundsException();
+//		}
 
-		if (size == 0) {
-			array[0] = new LinkedArrayElement<K,E>(0, -1, -1, content);
-			indexFirstElement = 0;
-			size++;
-			return;
-		}
+//		if (size == 0) {
+//			array[0] = new LinkedArrayElement<E>(0, -1, -1, content);
+//			indexFirstElement = 0;
+//			size++;
+//			return;
+//		}
 
 		int arrayIndexToSave = getFreeArrayIndex();
 		int prevIndex = -1;
 		int nextIndex = -1;
 
-		if (pos == 0) {
+		if (pos == null) {
 			// am Anfang
-			LinkedArrayElement<K,E> firstElement = getElementOfPosition(pos);
+			LinkedArrayElement<E> firstElement = array[0];
 			firstElement.setPrev(arrayIndexToSave);
 			nextIndex = firstElement.getIndex();
 			indexFirstElement = arrayIndexToSave;
-		} else if (pos == size) {
-			// wenn am Ende
-			LinkedArrayElement<K,E> lastElement = getElementOfPosition(pos - 1);
-			lastElement.setNext(arrayIndexToSave);
-			prevIndex = lastElement.getIndex();
 		} else {
-			// in der Mitte der Liste
-			LinkedArrayElement<K,E> posElement = getElementOfPosition(pos);
-			LinkedArrayElement<K,E> prevElement = (LinkedArrayElement<K,E>) array[posElement.getPrev()];
+			LinkedArrayElement<E> posElement = (LinkedArrayElement<E>)pos;
+			LinkedArrayElement<E> prevElement = (LinkedArrayElement<E>) array[posElement.getPrev()];
 			posElement.setPrev(arrayIndexToSave);
 			prevElement.setNext(arrayIndexToSave);
 			prevIndex = prevElement.getIndex();
 			nextIndex = posElement.getIndex();
 		}
 
-		array[arrayIndexToSave] = new LinkedArrayElement<K,E>(arrayIndexToSave, nextIndex, prevIndex, content);
+		array[arrayIndexToSave] = new LinkedArrayElement<E>(arrayIndexToSave, nextIndex, prevIndex, elem);
 		size++;
 	}
 
@@ -98,7 +104,7 @@ public class HAWLinkedArrayList<E> implements HAWList<K, E> {
 	}
 
 	@Override
-	public E retrieve(int pos) {
+	public HAWListElement<E> retrieve(Object pos) {
 		if (pos < 0 || pos >= size) {
 			throw new IndexOutOfBoundsException();
 		}
@@ -153,24 +159,44 @@ public class HAWLinkedArrayList<E> implements HAWList<K, E> {
 	}
 
 	@SuppressWarnings("unchecked")
-	private LinkedArrayElement<K,E> getElementOfPosition(int pos) {
-		LinkedArrayElement<K,E> arrayElement = (LinkedArrayElement<K,E>) array[indexFirstElement];
+	private LinkedArrayElement<E> getElementOfPosition(int pos) {
+		LinkedArrayElement<E> arrayElement = (LinkedArrayElement<E>) array[indexFirstElement];
 		for (int i = 0; i < pos; i++) {
-			arrayElement = (LinkedArrayElement<K,E>) array[arrayElement.getNext()];
+			arrayElement = (LinkedArrayElement<E>) array[arrayElement.getNext()];
 		}
 		return arrayElement;
 	}
 
 	@Override
-	public void delete(K key) {
-		// TODO Auto-generated method stub
-
+	public void delete(Object key) {
+		
 	}
 
 	@Override
-	public int find(K key) {
-		// TODO Auto-generated method stub
-		return 0;
+	public Object find(int key) {
+		
+		if(size == 0){
+			return null;
+		}
+		
+		
+		LinkedArrayElement<E> stopper = array[0];
+		stopper.setElement(new Element(null, key));
+		
+		LinkedArrayElement<E> elem = array[lastElementIndex];
+		
+		while(true){
+			if(elem.getElementKey()==key){
+				
+				if(elem.getIndex() == 0){
+					return null;
+				} else {
+					return elem;
+				}
+				
+			} 
+			elem = array[elem.getPrev()];			
+		}
 	}
 
 //	@SuppressWarnings("unchecked")
