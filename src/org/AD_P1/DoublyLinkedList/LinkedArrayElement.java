@@ -26,18 +26,18 @@ public class LinkedArrayElement<E> {
     /**
      * content (element)
      */
-    private HAWListElement<E> element;
+    private Element<E> element;
     
     
     public LinkedArrayElement(int index, int next, int prev, HAWListElement<E> element) {
         this.index = index;
         this.next = next;
         this.prev = prev;
-        this.element = element;
+        this.element = (Element<E>)element;
     }
 
     public String toString() {
-        return "Key: "+ element.getKey() + " Index: " + index + " next: " + next + " prev: " + prev;
+        return "Key: "+ element.getKey() + " Element: "+ element.getValue() + " Index: " + index + " next: " + next + " prev: " + prev;
     }
     
     public int getIndex() {
@@ -52,8 +52,8 @@ public class LinkedArrayElement<E> {
         return prev;
     }
 
-    public HAWListElement<E> getElementWrapper() {
-        return element;
+    public Element<E> getElementWrapper() {
+        return this.element;
     }
     
     public E getElementData(){
