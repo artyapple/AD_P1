@@ -1,91 +1,102 @@
 package org.AD_P1.Tests;
 import static org.junit.Assert.*;
 
+import java.util.Map;
 import java.util.UUID;
 
+import org.AD_P1.Element.Element;
 import org.AD_P1.HAWLinkedList.HAWLinkedList;
+import org.AD_P1.HAWLinkedList.HAWNode;
 import org.AD_P1.Interfaces.HAWList;
 import org.junit.Before;
 import org.junit.Test;
 
-public class HAWListTest {
+public class HAWLinkedListTest {
 	
-	private HAWList<UUID, String> linkedList;
+	private HAWLinkedList<String> linkedList;
 	private String string1;
-	private UUID uuid1;
+	private int key1;
 	private String string2;
-	private UUID uuid2;
+	private int key2;
 	private String string3;
-	private UUID uuid3;
+	private int key3;
 	private String string4;
-	private UUID uuid4;
+	private int key4;
 	
 	@Before
 	public void prepare() {
-		linkedList = new HAWLinkedList<UUID, String>();
+		linkedList = new HAWLinkedList<String>();
 		string1 = "1";
-		uuid1 = UUID.randomUUID();
+		key1 = 1;
 		string2 = "2";
-		uuid2 = UUID.randomUUID();
+		key2 = 2;
 		string3 = "3";
-		uuid3 = UUID.randomUUID();
+		key3 = 3;
 		string4 = "4";
-		uuid4 = UUID.randomUUID();
+		key4 = 4;
 	}
 
 	@Test
 	public void testInsertRetrieveFind() {
 		assertEquals(0, linkedList.size());
-		assertEquals(-1, linkedList.find(uuid1));
+		assertEquals(null, linkedList.find(key1));
 		
-		linkedList.insert(0, string1, uuid1);
+		linkedList.insert(linkedList.head, new Element<String>(string1, key1));
 		assertEquals(1, linkedList.size());
-		assertEquals(0, linkedList.find(uuid1));
-		assertEquals(string1, linkedList.retrieve(0));
+		assertEquals(linkedList.head, linkedList.find(key1));
+		assertEquals(string1, linkedList.retrieve(linkedList.head).getValue());
 		
-		linkedList.insert(0, string2, uuid2);
-		linkedList.insert(2, string3, uuid3);
-		linkedList.insert(2, string4, uuid4);
+		linkedList.insert(linkedList.find(key1), new Element<String>(string2, key2));
+		linkedList.insert(linkedList.find(key1), new Element<String>(string3, key3));
+		linkedList.insert(linkedList.find(key1), new Element<String>(string4, key4));
 		assertEquals(4, linkedList.size());
-		assertEquals(1, linkedList.find(uuid1));
-		assertEquals(string1, linkedList.retrieve(1));
-		assertEquals(0, linkedList.find(uuid2));
-		assertEquals(string2, linkedList.retrieve(0));
-		assertEquals(3, linkedList.find(uuid3));
-		assertEquals(string3, linkedList.retrieve(3));
-		assertEquals(2, linkedList.find(uuid4));
-		assertEquals(string4, linkedList.retrieve(2));
+		assertEquals(string1, linkedList.retrieve(linkedList.find(key1)).getValue());
+		assertEquals(string2, linkedList.retrieve(linkedList.find(key2)).getValue());
+		assertEquals(string3, linkedList.retrieve(linkedList.find(key3)).getValue());
+		assertEquals(string4, linkedList.retrieve(linkedList.find(key4)).getValue());
 	}
 	
 	@Test
 	public void testDelete() {
-		linkedList.insert(0, string1, uuid1);
-		linkedList.insert(1, string2, uuid2);
-		linkedList.insert(2, string3, uuid3);
-		linkedList.insert(3, string4, uuid4);
-		linkedList.delete(2);
-		assertEquals(-1, linkedList.find(uuid3));
-		linkedList.delete(2);
-		assertEquals(-1, linkedList.find(uuid4));
+		linkedList.insert(linkedList.head, new Element<String>(string1, key1));
+		linkedList.insert(linkedList.find(key1), new Element<String>(string2, key2));
+		linkedList.insert(linkedList.find(key2), new Element<String>(string3, key3));
+		linkedList.insert(linkedList.find(key3), new Element<String>(string4, key4));
+		linkedList.delete(linkedList.find(key3));
+		assertEquals(null, linkedList.find(key3));
+		linkedList.delete(linkedList.find(key4));
+		assertEquals(null, linkedList.find(key4));
 		assertEquals(2, linkedList.size());
 	}
 	
 	@Test
 	public void testConCat() {
-		linkedList.insert(0, string1, uuid1);
-		linkedList.insert(1, string2, uuid2);
-		HAWList<UUID, String> linkedList2 = new HAWLinkedList<UUID, String>();
-		HAWList<UUID, String> concatList = linkedList.concat(linkedList2);
-		assertEquals(2, concatList.size());
+		linkedList.insert(linkedList.head, new Element<String>(string1, key1));
+		linkedList.insert(linkedList.find(key1), new Element<String>(string2, key2));
+		HAWLinkedList<String> linkedList2 = new HAWLinkedList<String>();
+		linkedList.concat(linkedList2);
+		assertEquals(2, linkedList.size());
 		
-		linkedList2.insert(0, string3, uuid3);
-		linkedList2.insert(1, string4, uuid4);
-		concatList = linkedList.concat(linkedList2);
-		assertEquals(4, concatList.size());
-		assertEquals(0, concatList.find(uuid1));
-		assertEquals(1, concatList.find(uuid2));
-		assertEquals(2, concatList.find(uuid3));
-		assertEquals(3, concatList.find(uuid4));
+		linkedList2.insert(linkedList2.head, new Element<String>(string3, key3));
+		linkedList2.insert(linkedList2.find(key3), new Element<String>(string4, key4));
+		linkedList.concat(linkedList2);
+		assertEquals(4, linkedList.size());
+		assertEquals(string1, linkedList.retrieve(linkedList.find(key1)).getValue());
+		assertEquals(string2, linkedList.retrieve(linkedList.find(key2)).getValue());
+		assertEquals(string3, linkedList.retrieve(linkedList.find(key3)).getValue());
+		assertEquals(string4, linkedList.retrieve(linkedList.find(key4)).getValue());
+	}
+	
+	@Test
+	public void insertNotValidPosition() {
+		try {
+			linkedList.insert(null, new Element<String>(string1, key1));
+			fail("insert() wirft keine IllegalArgumentException");
+		} catch (IllegalArgumentException e) {}
+		try {
+			linkedList.insert(linkedList.head.getNextNode(), new Element<String>(string1, key1));
+			fail("insert() wirft keine IllegalArgumentException");
+		} catch (IllegalArgumentException e) {}
 	}
 
 }

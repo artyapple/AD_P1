@@ -1,85 +1,84 @@
 package org.AD_P1.HAWLinkedList;
 import org.AD_P1.Interfaces.HAWList;
+import org.AD_P1.Interfaces.HAWListElement;
 
-public class HAWLinkedList< E> implements HAWList< E>{
+public class HAWLinkedList<E> implements HAWList<E>{
 	
-	private Node head;
-	private Node tail;
+	public HAWNode<E> head;
+	private HAWNode<E> tail;
 	private int size;
 	
 	public HAWLinkedList() {
-		tail = new Node(null, null, null);
-		head = new Node(null, null, tail);
+		tail = new HAWNode<E>(null, null);
+		head = new HAWNode<E>(null, tail);
 		tail.setNextNode(head);
 		size = 0;
 	}
 
 	@Override
-	public void insert(int pos, E elem, K key) {
-		checkPos(pos);
-		checkKey(key);
-		Node prevNode = getPreviousNode(pos);
-		Node newNode = new Node(key, elem, prevNode.getNextNode());
+	public void insert(Object pos, HAWListElement<E> elem) {
+		HAWNode<E> prevNode = checkPos(pos);
+		HAWNode<E> newNode = new HAWNode<E>(elem, prevNode.getNextNode());
 		prevNode.setNextNode(newNode);
-		if (pos == size) {
+		if (prevNode.getNextNode() == tail) {
 			tail.setNextNode(newNode);
 		} 
 		++size;
 	}
 
 	@Override
-	public void delete(int pos) {
-		checkPos(pos);
-		Node prevNode = getPreviousNode(pos);
-		prevNode.setNextNode(prevNode.getNextNode().getNextNode());
+	public void delete(Object pos) {
+		HAWNode<E> node = checkPos(pos);
+		HAWNode<E> newNextNode = node.getNextNode().getNextNode();
+		node.setNextNode(newNextNode);
+		if (newNextNode == tail) {
+			tail.setNextNode(node);
+		}
 		--size;
 	}
 
 	@Override
-	public void delete(K key) {
-		checkKey(key);
-		int pos = find(key);
-		delete(pos);
+	public void delete(int key) {
+		delete(find(key));
 	}
 
 	@Override
-	public int find(K key) {
-		checkKey(key);
-		int pos = -1;
-		Node node = head;
-		for (int i = 0; i < size; i++) {
-			node = node.getNextNode();
-			if (node.getKey().equals(key)) {
-				pos = i;
-				break;
-			}
+	public HAWListElement<E> find(int key) {
+		HAWNode<E> pos = head;
+		while (pos != tail && pos.getNextNode().getKey() != key) {
+			pos = pos.getNextNode();
+		}
+		if (pos == tail) {
+			pos = null;
 		}
 		return pos;
 	}
 
 	@Override
-	public E retrieve(int pos) {
-		checkPos(pos);
-		Node prevNode = getPreviousNode(pos);
-		return prevNode.getNextNode().getElem();
-	}
-	
-	@Override
-	public K retrieveKey(int pos) {
-		checkPos(pos);
-		Node prevNode = getPreviousNode(pos);
-		return prevNode.getNextNode().getKey();
+	public HAWListElement<E> retrieve(Object pos) {
+		HAWNode<E> node = checkPos(pos).getNextNode();
+		return node.getElement();
 	}
 
 	@Override
-	public HAWList<K, E> concat(HAWList<K, E> otherList) {
-		HAWList<K, E> newList = new HAWLinkedList<K, E>();
-		for (int i = 0; i < size(); i++) {
-			newList.insert(i, retrieve(i), retrieveKey(i));
+	public void concat(HAWList<E> otherList) {
+		if (!(otherList instanceof HAWLinkedList)) {
+			throw new IllegalArgumentException();
 		}
-		for (int i = 0; i < otherList.size(); i++) {
-			newList.insert(size + i, otherList.retrieve(i), otherList.retrieveKey(i));
-		} 
+		if (otherList.size() > 0) {
+			HAWLinkedList<E> otherLinkedList = (HAWLinkedList<E>) otherList; 
+			HAWNode<E> node = tail.getNextNode(); 
+			node.setNextNode(otherLinkedList.head.getNextNode());
+			tail = otherLinkedList.tail;
+			size += otherLinkedList.size();
+		}
+//		HAWNode<E> node = tail.getNextNode(); 
+//		node.setNextNode(nextNode);
+//		
+//		for (int i = 0; i < otherList.size(); i++) {
+//			insert(node, retrieve(i));
+//			node = node.getNextNode();
+//		}
 //		if (otherList.size() == 0) {
 //			return this;
 //		}
@@ -94,7 +93,6 @@ public class HAWLinkedList< E> implements HAWList< E>{
 //				insert(size + i, otherList.retrieve(i), retrieveKey(i));
 //			} 
 //		}
-		return newList;
 	}
 	
 	@Override
@@ -102,57 +100,16 @@ public class HAWLinkedList< E> implements HAWList< E>{
 		return size;
 	}
 	
-	private Node getPreviousNode(int pos) {
-		if (pos == size) {
-			return tail.getNextNode();
-		}
-		Node node = head;
-		for (int i = 0; i < pos; i++) {
-			node = node.getNextNode();
-		}
-		return node;
-	}
-	
-	private void checkPos(int pos) {
-		if (pos < 0 || pos > size) {
-			throw new IndexOutOfBoundsException();
-		}
-	}
-	
-	private void checkKey(K key) {
-		if (key == null) {
+	@SuppressWarnings("unchecked")
+	private HAWNode<E> checkPos(Object pos) {
+		if (!(pos instanceof HAWNode)) {
+			throw new IllegalArgumentException();
+		} 
+		HAWNode<E> node = (HAWNode<E>) pos; 
+		if (node == tail) {
 			throw new IllegalArgumentException();
 		}
-	} 
-	
-	private class Node {
-		
-		private K key;
-		private E elem;
-		private Node nextNode;
-		
-		public Node(K key, E elem, Node nextNode) {
-			this.key = key;
-			this.elem = elem;
-			this.nextNode = nextNode;
-		}
-		
-		public K getKey() {
-			return key;
-		}
-		
-		public E getElem() {
-			return elem;
-		}
-		
-		public void setNextNode(Node nextNode) {
-			this.nextNode = nextNode;
-		}
-		
-		public Node getNextNode() {
-			return nextNode;
-		}
-		
+		return node;
 	}
 
 }
