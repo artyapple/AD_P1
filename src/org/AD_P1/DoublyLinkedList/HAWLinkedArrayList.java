@@ -1,5 +1,7 @@
 package org.AD_P1.DoublyLinkedList;
 
+import static org.junit.Assert.assertTrue;
+
 import org.AD_P1.Counter.Counter;
 import org.AD_P1.Element.Element;
 import org.AD_P1.Interfaces.HAWList;
@@ -120,7 +122,8 @@ public class HAWLinkedArrayList<E> extends Counter implements HAWList<E> {
 	public HAWListElement<E> retrieve(Object pos) {
 		count();
 		if (pos == null) {
-			throw new IndexOutOfBoundsException();
+			//throw new IndexOutOfBoundsException();
+			return null;
 		}
 		LinkedArrayElement<E> arrayElement = (LinkedArrayElement<E>) pos;
 		return arrayElement.getElementWrapper();
@@ -294,58 +297,83 @@ public class HAWLinkedArrayList<E> extends Counter implements HAWList<E> {
 
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
-		HAWLinkedArrayList<String> list = new HAWLinkedArrayList<String>();
+		HAWLinkedArrayList<Integer> list = new HAWLinkedArrayList<Integer>();
+		int keyCounter = 1;
+		///
+		
+		list.insert(list.find(keyCounter), new Element<Integer>(1, keyCounter++));
+		list.retrieve(list.find(keyCounter)).getValue();
 
-		list.insert(list.find(111), new Element<String>("a", 111));
-		list.insert(list.find(111), new Element<String>("b", 222));
-		list.insert(list.find(000), new Element<String>("c", 333));
-		list.delete(111);
-		list.insert(list.find(222), new Element<String>("f", 444));
-		list.delete(list.find(222));
-		list.append(new Element<String>("x", 555));
-		list.append(new Element<String>("y", 666));
-		list.append(new Element<String>("z", 777));
-		String str = list.retrieve(list.find(333)).getValue();
+		// push check
+		list.insert(list.find(keyCounter), new Element<Integer>(2, keyCounter++));
+		for (int i = 0; i < list.array.length; i++) {
+			System.out.println((LinkedArrayElement<String>) (list.array[i]) + ", ");
+		}
+		
+		list.retrieve(list.find(1));
+		list.retrieve(list.find(2));
+		
+		for (int i = 0; i < list.array.length; i++) {
+			System.out.println((LinkedArrayElement<String>) (list.array[i]) + ", ");
+		}
+		
+		///
+		
+		
+
+//		list.insert(null, new Element<String>("a", 111));
+//		String st = list.retrieve(list.find(111)).getValue();
+//		System.out.println("retrieve elem 111: " + st);
+//		
+//		list.insert(list.find(111), new Element<String>("b", 222));
+//		list.insert(list.find(000), new Element<String>("c", 333));
+//		list.delete(111);
+//		list.insert(list.find(222), new Element<String>("f", 444));
+//		list.delete(list.find(222));
+//		list.append(new Element<String>("x", 555));
+//		list.append(new Element<String>("y", 666));
+//		list.append(new Element<String>("z", 777));
+//		String str = list.retrieve(list.find(333)).getValue();
 
 		// c, a, b
 
 		// list.delete(1);
 		// list.insert(1, "d");
-
-		System.out.println(list.size);
-		for (int i = 0; i < list.array.length; i++) {
-			System.out.println((LinkedArrayElement<String>) (list.array[i]) + ", ");
-		}
-		System.out.println("retrieve elem 333: " + str);
-		System.out.println("array lenght: " + list.array.length);
-
-		list.clear();
-		System.out.println("---clear list---");
-		for (int i = 0; i < list.array.length; i++) {
-			System.out.println((LinkedArrayElement<String>) (list.array[i]) + ", ");
-		}
-		System.out.println("array lenght: " + list.array.length);
-
-		for (int i = 0; i < 25; i++) {
-			list.append(new Element<String>("test", 10000 + i));
-		}
-		System.out.println("---increase list---");
-		for (int i = 0; i < list.array.length; i++) {
-			System.out.println((LinkedArrayElement<String>) (list.array[i]) + ", ");
-		}
-
-		System.out.println("array lenght: " + list.array.length);
-
-		HAWLinkedArrayList<String> otherList = new HAWLinkedArrayList<String>();
-		for (int i = 0; i < 16; i++) {
-			otherList.append(new Element<String>("test", 10025 + i));
-		}
-
-		System.out.println("---concat list---");
-
-		list.concat(otherList);
-		for (int i = 0; i < list.array.length; i++) {
-			System.out.println((LinkedArrayElement<String>) (list.array[i]) + ", ");
-		}
+//
+//		System.out.println(list.size);
+//		for (int i = 0; i < list.array.length; i++) {
+//			System.out.println((LinkedArrayElement<String>) (list.array[i]) + ", ");
+//		}
+//		System.out.println("retrieve elem 333: " + str);
+//		System.out.println("array lenght: " + list.array.length);
+//
+//		list.clear();
+//		System.out.println("---clear list---");
+//		for (int i = 0; i < list.array.length; i++) {
+//			System.out.println((LinkedArrayElement<String>) (list.array[i]) + ", ");
+//		}
+//		System.out.println("array lenght: " + list.array.length);
+//
+//		for (int i = 0; i < 25; i++) {
+//			list.append(new Element<String>("test", 10000 + i));
+//		}
+//		System.out.println("---increase list---");
+//		for (int i = 0; i < list.array.length; i++) {
+//			System.out.println((LinkedArrayElement<String>) (list.array[i]) + ", ");
+//		}
+//
+//		System.out.println("array lenght: " + list.array.length);
+//
+//		HAWLinkedArrayList<String> otherList = new HAWLinkedArrayList<String>();
+//		for (int i = 0; i < 16; i++) {
+//			otherList.append(new Element<String>("test", 10025 + i));
+//		}
+//
+//		System.out.println("---concat list---");
+//
+//		list.concat(otherList);
+//		for (int i = 0; i < list.array.length; i++) {
+//			System.out.println((LinkedArrayElement<String>) (list.array[i]) + ", ");
+//		}
 	}
 }

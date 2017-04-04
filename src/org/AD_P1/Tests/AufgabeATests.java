@@ -55,6 +55,7 @@ public class AufgabeATests {
 		assertTrue(list.retrieve(11).getValue() == 4);
 
 		// insert Aufwandsanalyse
+		System.out.println("Implementation A: ArrayList");
 		keyCounter = 0;
 		list = new ArrayList<Integer>();
 		for (int i = 1; i < 6; i++) {
