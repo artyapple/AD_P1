@@ -88,7 +88,7 @@ public class HAWLinkedListTest {
 	}
 	
 	@Test
-	public void insertNotValidPosition() {
+	public void testInsertInvalidPosition() {
 		try {
 			linkedList.insert(null, new Element<String>(string1, key1));
 			fail("insert() wirft keine IllegalArgumentException");
@@ -97,6 +97,64 @@ public class HAWLinkedListTest {
 			linkedList.insert(linkedList.head.getNextNode(), new Element<String>(string1, key1));
 			fail("insert() wirft keine IllegalArgumentException");
 		} catch (IllegalArgumentException e) {}
+	}
+	
+	@Test
+	public void testEffort() {
+		HAWLinkedList<String> list1k = insert1kInList(1000);
+		HAWLinkedList<String> cclist1k = insert1kInList(1000);
+		HAWLinkedList<String> list2k = insert1kInList(2000);
+		HAWLinkedList<String> cclist2k = insert1kInList(2000);
+		HAWLinkedList<String> list3k = insert1kInList(3000);
+		HAWLinkedList<String> cclist3k = insert1kInList(3000);
+		HAWLinkedList<String> list4k = insert1kInList(4000);
+		HAWLinkedList<String> cclist4k = insert1kInList(4000);
+		HAWLinkedList<String> list5k = insert1kInList(5000);
+		HAWLinkedList<String> cclist5k = insert1kInList(5000);
+		// 1k
+		System.out.println("1k: " + list1k.size());
+		Object posAt80Perc = list1k.find(2);
+		list1k.insert(posAt80Perc, new Element<String>("insert", -2));
+		list1k.delete(-2);
+		list1k.retrieve(posAt80Perc);
+		list1k.concat(cclist1k);
+		// 2k
+		System.out.println("2k");
+		posAt80Perc = list2k.find(2);
+		list2k.insert(posAt80Perc, new Element<String>("insert", -2));
+		list2k.delete(-2);
+		list2k.retrieve(posAt80Perc);
+		list2k.concat(cclist2k);
+		// 3k
+		System.out.println("3k");
+		posAt80Perc = list3k.find(2);
+		list3k.insert(posAt80Perc, new Element<String>("insert", -2));
+		list3k.delete(-2);
+		list3k.retrieve(posAt80Perc);
+		list3k.concat(cclist3k);
+		// 4k
+		System.out.println("4k");
+		posAt80Perc =  list4k.find(2);
+		list4k.insert(posAt80Perc, new Element<String>("insert", -2));
+		list4k.delete(-2);
+		list4k.retrieve(posAt80Perc);
+		list4k.concat(cclist4k);
+		// 5k
+		System.out.println("5k");
+		posAt80Perc = list5k.find(2);
+		list5k.insert(posAt80Perc, new Element<String>("insert", -2));
+		list5k.delete(-2);
+		list5k.retrieve(posAt80Perc);
+		list5k.concat(cclist5k);
+	}
+	
+	private HAWLinkedList<String> insert1kInList(int size) {
+		HAWLinkedList<String> list = new HAWLinkedList<String>();
+		list.insert(list.head, new Element<String>("string" + 0, 0));
+		for (int i = 1; i < size; i++) {
+			list.insert(list.find(i - 1), new Element<String>("string" + i, i));
+		}
+		return list;
 	}
 
 }
